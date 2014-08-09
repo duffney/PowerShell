@@ -6,10 +6,14 @@
 # Comments: Call the function Unblcok with the path to the folder containing blocked files in "" after it, see line 15.
 # ---------------------------------------------------
 
-Function Unblock ($path) { 
+Function Unblock { 
 
-gci "$path" -Recurse | Unblock-File -WhatIf
+Param(
+[string]$Path
+)
+
+Get-ChildItem "$path" -Recurse | Unblock-File -WhatIf
 
 }
 
-Unblock "C:\Downloads\PSAppDeployToolkit_v3.1.4"
+Unblock -Path "C:\Downloads\PSAppDeployToolkit_v3.1.4"  
