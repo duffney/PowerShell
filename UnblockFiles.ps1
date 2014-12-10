@@ -1,19 +1,34 @@
-# ---------------------------------------------------
-# Version: 1.0
-# Author: Joshua Duffney
-# Date: 07/13/2014
-# Description: Using PowerShell to Unblock files that are downloaded from the internet.
-# Comments: Call the function Unblcok with the path to the folder containing blocked files in "" after it, see line 15.
-# ---------------------------------------------------
+Function Unblock-Directory { 
+<#
+.SYNOPSIS
 
-Function Unblock { 
+Unblocks files
 
+.DESCRIPTION
+
+This function unblocks files that are downloaded from the internet, preventing errors upon execution.
+
+.PARAMETER Path
+
+The path of the directory containing locked files.
+
+.EXAMPLE
+
+PS C:\> Unblock-Directory -Path "C:\ScriptDownloads"
+
+.Notes
+
+.LINK
+
+#>
 Param(
+[CmdletBinding()]
+
+[Parameter(Mandatory=$True)]
 [string]$Path
+
 )
 
-Get-ChildItem "$path" -Recurse | Unblock-File -WhatIf
+Get-ChildItem "$path" -Recurse | Unblock-File
 
 }
-
-Unblock -Path "C:\Downloads\PSAppDeployToolkit_v3.1.4"  
