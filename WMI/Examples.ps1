@@ -1,0 +1,1 @@
+Get-WmiObject Win32_LogicalDisk -Filter "DriveType=3" | Format-Table -Property @{n='Drive Letter';e={$PSItem.DeviceID}},@{n='Free Space(GB)';e={$PSItem.FreeSpace / 1GB};formatstring='N0'},@{n='% Free Space';e={$PSItem.FreeSpace / $PSitem.Size * 100};formatstring='N0'}
