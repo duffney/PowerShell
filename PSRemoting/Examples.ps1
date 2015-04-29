@@ -11,3 +11,5 @@ Get-Module -listavailable -pssession $dc | where {$_.Name -like "*share*'}
 Import-Module -PSSession $dc -Name SMBShare -Prefix DC 
  
 $Computers = New-PSSession -Computername LON-DC1,LON-CL1 
+
+Get-ADComputer –filter * | % {Invoke-command $PSitem.Name –scriptblock { get-hotfix}}
