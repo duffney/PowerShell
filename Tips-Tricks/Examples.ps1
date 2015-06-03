@@ -9,3 +9,6 @@ Ctrl + D
 
 #Goes to Script Pane
 Ctrl + I
+
+#Return limited resutls
+Get-aduser -filter * -properties * -resultsetsize 1  
