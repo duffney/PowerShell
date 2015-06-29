@@ -29,6 +29,8 @@ PROCESS {
         }
         Catch [Microsoft.ActiveDirectory.Management.ADException] {
             Write-Warning "$Group was already a member of $TargetGroup"
+            Write-Verbose "Removing $Group from Member of"
+            Remove-ADGroupMember -Identity $Group -Members $TargetGroup -Confirm:$false
         }
     } 
 }
