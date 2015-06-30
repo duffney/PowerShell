@@ -17,3 +17,10 @@ Get-aduser -filter * -properties * -resultsetsize 1
 Ipconfig | clip
 
 #Ctrl + alt to select multipule lines
+
+#Removing characters from end of variable
+$string = $string -replace ".$"
+
+#Add or Removing characters from start of variable
+$var = "Blah" 
+$var = $var.Insert(0,"01")
