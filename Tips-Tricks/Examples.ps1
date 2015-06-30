@@ -13,5 +13,7 @@ Ctrl + I
 #Return limited resutls
 Get-aduser -filter * -properties * -resultsetsize 1  
 
-#pipe copy
+#Clip copies output from a cmdlet
 Ipconfig | clip
+
+#Ctrl + alt to select multipule lines
