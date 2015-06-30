@@ -24,3 +24,6 @@ $string = $string -replace ".$"
 #Add or Removing characters from start of variable
 $var = "Blah" 
 $var = $var.Insert(0,"01")
+
+#Open scripts within ISE
+psedit .\script1.ps1
