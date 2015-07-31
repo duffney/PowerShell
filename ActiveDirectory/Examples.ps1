@@ -8,3 +8,4 @@ Get-ADComputer –filter * | % {Get-hotfix –computername $PSItem.Name}
 
 Get-ADComputer –filter * | % {Invoke-command $PSitem.Name –scriptblock { get-hotfix}}
 
+help about_active*
