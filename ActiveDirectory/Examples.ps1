@@ -8,4 +8,6 @@ Get-ADComputer –filter * | % {Get-hotfix –computername $PSItem.Name}
 
 Get-ADComputer –filter * | % {Invoke-command $PSitem.Name –scriptblock { get-hotfix}}
 
+Get-ADGroupMember -Identity 'domain controllers' | % {Get-ADComputer $PSItem.Name -Properties OperatingSystem} | select Name,OperatingSystem
+
 help about_active*
