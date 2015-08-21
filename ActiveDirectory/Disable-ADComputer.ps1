@@ -31,22 +31,24 @@ Disable-ADComputer -ComputerName computer1 -DisabledOU 'OU=Computers,OU=Disabled
     PROCESS {
         foreach($Computer in $ComputerName){
             Try {
+                $ComputerInfo = Get-ADComputer -Identity $Computer -Server $Domain -Properties Description
+                $Description = $($ComputerInfo.Description) + " "+ $Description
+
                 Write-Verbose "Disabling $Computer"
                 
-                $ExistingDescription = (Get-ADComputer -Identity $Computer -Server $Domain -Properties Description).Description
-                $Description = $ExistingDescription + " "+ $Description
-                
-                Set-ADComputer -Identity $Computer -Description $Description -Enabled $false -Server $Domain
+                Set-ADComputer -Identity $Computer -Description $Description -Enabled $false -Server $Domain -Verbose
 
                 Write-Verbose "Moving $Computer to $DisabledOU"
 
-                $DistinguishedName = (Get-ADComputer -Identity $Computer -Server $Domain).DistinguishedName
-                Move-ADObject -Identity $DistinguishedName -TargetPath $DisabledOU -Server $Domain -Verbose
+                Move-ADObject -Identity $($ComputerInfo.DistinguishedName) -TargetPath $DisabledOU -Server $Domain -Verbose
                 
             }
             Catch [Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException]{
                 Write-Warning "$Computer was not found"
                 Write-Output $Computer | Out-File $ErrorLog
+            }
+            Catch {
+                Write-Warning $_.Exception.Message
             }
         }
     }
