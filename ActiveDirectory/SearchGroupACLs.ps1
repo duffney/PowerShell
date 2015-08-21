@@ -1,3 +1,4 @@
+#Slack Test
 $Domain = "Domain"
 $GroupName = "Enterprise Admins"
 $Groups = Get-ADGroup -Filter * -ResultSetSize 5| select DistinguishedName,SamAccountName
