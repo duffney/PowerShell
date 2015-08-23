@@ -26,4 +26,6 @@ $var = "Blah"
 $var = $var.Insert(0,"01")
 
 #Open scripts within ISE
-psedit .\script1.ps1
+psedit .\script1.
+
+#Ctrl + space to call out intlisense
