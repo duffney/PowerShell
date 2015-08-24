@@ -1,0 +1,1 @@
+﻿New-VM -NewVHDPath "F:\Hyper-v\Virtual Hard Disks\WS2016P3.vhdx" -NewVHDSizeBytes 32GB -Generation 2 -Name WS2016P3 -SwitchName Stockholm
