@@ -29,3 +29,7 @@ $var = $var.Insert(0,"01")
 psedit .\script1.
 
 #Ctrl + space to call out intlisense
+
+#v4 where
+$x = gps 
+$x.where{$_.Name -like "*ss"}
