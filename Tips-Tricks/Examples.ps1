@@ -33,3 +33,6 @@ psedit .\script1.
 #v4 where
 $x = gps 
 $x.where{$_.Name -like "*ss"}
+
+$x = gps 
+$x.where{$_.Name -like "*ss"}.Name
