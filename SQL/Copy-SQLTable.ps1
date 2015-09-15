@@ -42,5 +42,3 @@ $InsertColumns=$InsertColumns.Trim(',')
         Invoke-DatabaseQuery -connectionString $TargetConnectionString -query $query -isSQLServer
     }
 }
-
-Copy-SQLTable
