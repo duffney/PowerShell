@@ -1,5 +1,22 @@
-﻿function Copy-SQLTable {
-
+function Copy-SQLTable {
+<#
+.SYNOPSIS
+Copies a table from a source database and inserts it into the target database.
+.DESCRIPTION
+Takes all the data from the source database and inserts it into the target database with the same name.
+.PARAMETER TableName
+Specifies the table name to be copied from the source and inserted into the target.
+.PARAMETER SourceServer
+Specifies source server DNS name and instance, use ServerName\InstanceName.
+.PARAMETER SourceDataBase
+Specifies the source database name.
+.PARAMETER TargetDatabase
+Specifies the target database name.
+.PARAMETER TargetServer
+SPecifies the target server DNS name and instance, user ServerName\InstanceName.
+.EXAMPLE
+Copy-SQLTable -TableName 'OmahaPSUG_Computers' -SourceServer 'SQL01\SQLEXPRESS' -SourceDataBase 'OmahaPSUG' -TargetDatabase 'OmahaPSUG_BK' -TargetServer 'SQL01\SQLEXPRESS'
+#>
 [CmdletBinding()]
 
 Param(
@@ -10,9 +27,9 @@ Param(
 
 [string]$SourceDataBase,
 
-[string]$TargetDatabase,
+[string]$TargetServer,
 
-[string]$TargetServer
+[string]$TargetDatabase
 )
 
 
