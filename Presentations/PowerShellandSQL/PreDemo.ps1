@@ -1,8 +1,10 @@
 Import-Module SQLcmdlets
 $ConnectionString = "server=SQL01\SQLEXPRESS;database=OmahaPSUG;trusted_connection=true"
+$ConnectionStringOmahaPSUGBK = "server=SQL01\SQLEXPRESS;database=OmahaPSUG_BK;trusted_connection=true"
 
 Invoke-DatabaseQuery -connectionString $ConnectionString -query "Delete  From OmahaPSUG_Users" -isSQLServer
 Invoke-DatabaseQuery -connectionString $ConnectionString -query "Delete  From OmahaPSUG_Computers" -isSQLServer
+Invoke-DatabaseQuery -connectionString $ConnectionStringOmahaPSUGBK -query "Delete  From OmahaPSUG_Computers" -isSQLServer
 Set-ADComputer -Identity DC01 -Location $null -Verbose
 
 $Computer = Get-ADComputer -Identity DC01 -Properties LastLogonDate,OperatingSystem,Description

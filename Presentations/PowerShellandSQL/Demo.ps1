@@ -63,3 +63,10 @@ Foreach ($UserPrincipalName in $UserPrincipalNames){
     Invoke-DatabaseQuery -connectionString $ConnectionString -query $UpdateQuery -isSQLServer
 
 }
+
+##Load Copy-SQLTable function
+.\GitHub\PowerShell\SQL\Copy-SQLTable.ps1
+
+##Copy one table to another
+##Blog post http://duffney.github.io/CopySQLTable/
+Copy-SQLTable -TableName 'OmahaPSUG_Computers' -SourceServer 'SQL01\SQLEXPRESS' -SourceDataBase 'OmahaPSUG' -TargetDatabase 'OmahaPSUG_BK' -TargetServer 'SQL01\SQLEXPRESS'
