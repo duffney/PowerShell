@@ -1,6 +1,7 @@
 break
 
 ##Import SQLcmdlet Module & configure connection string
+##Module URL https://github.com/Duffney/PowerShell/blob/master/Modules/SQLcmdlets.psm1
 Import-Module SQLcmdlets
 $ConnectionString = "server=SQL01\SQLEXPRESS;database=OmahaPSUG;trusted_connection=true"
 
