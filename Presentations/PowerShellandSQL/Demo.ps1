@@ -1,7 +1,6 @@
 break
 
 ##Import SQLcmdlet Module & configure connection string
-##Module URL https://github.com/Duffney/PowerShell/blob/master/Modules/SQLcmdlets.psm1
 Import-Module SQLcmdlets
 $ConnectionString = "server=SQL01\SQLEXPRESS;database=OmahaPSUG;trusted_connection=true"
 
@@ -34,6 +33,8 @@ $query = "Insert Into OmahaPSUG_Computers (SamAccountName,Name,SID,Distinguished
 Values ('$($Computer.SamAccountName)','$($Computer.Name)','$($Computer.SID)','$($Computer.DistinguishedName)','Manticore.org','$($Computer.LastLogonDate)','$($Computer.Description)','$($Computer.OperatingSystem)')"
 
 Invoke-DatabaseQuery -connectionString $ConnectionString -query $query -isSQLServer
+
+##Show SQL OmahaPSUG_Computers table
 
 #Insert Loop
 $Users = Get-ADUser -Filter * -Properties mail,LastLogonDate,Description,CanonicalName
