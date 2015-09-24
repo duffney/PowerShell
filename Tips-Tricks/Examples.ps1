@@ -36,3 +36,6 @@ $x.where{$_.Name -like "*ss"}
 
 $x = gps 
 $x.where{$_.Name -like "*ss"}.Name
+
+##Awesome PS module | show-object
+Install-Module PowerShellCookbook
