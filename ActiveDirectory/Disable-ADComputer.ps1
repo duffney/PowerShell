@@ -26,21 +26,43 @@ Disable-ADComputer -ComputerName computer1 -DisabledOU 'OU=Computers,OU=Disabled
         [string]$ErrorLog = 'c:\retry.txt'
     )
     BEGIN {
+        
         Write-Verbose "Starting Disable-ADComputer"
+    
     }
+    
     PROCESS {
+ 
         foreach($Computer in $ComputerName){
+ 
             Try {
-                $ComputerInfo = Get-ADComputer -Identity $Computer -Server $Domain -Properties Description
+
+                $GetParms = @{
+                    'Identity' = $Computer
+                    'Server' = $Domain
+                }
+
+                if ($Description) {$GetParms.Add('Properties','Description')}
+
+                $ComputerInfo = Get-ADComputer @GetParms
                 $Description = $($ComputerInfo.Description) + " "+ $Description
+
+                $SetParms = @{
+                    'Identity' = $Computer
+                    'Server' = $Domain
+                    'Enabled' = $false
+                }
+
+                if ($Description) {$SetParms.Add('Description',$Description)}
+
 
                 Write-Verbose "Disabling $Computer"
                 
-                Set-ADComputer -Identity $Computer -Description $Description -Enabled $false -Server $Domain -Verbose
+                Set-ADComputer @SetParms
 
                 Write-Verbose "Moving $Computer to $DisabledOU"
 
-                Move-ADObject -Identity $($ComputerInfo.DistinguishedName) -TargetPath $DisabledOU -Server $Domain -Verbose
+                Move-ADObject -Identity $($ComputerInfo.DistinguishedName) -TargetPath $DisabledOU -Server $Domain
                 
             }
             Catch [Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException]{
