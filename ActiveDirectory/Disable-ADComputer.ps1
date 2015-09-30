@@ -13,8 +13,12 @@ Specifies the Distinguished Name of the OU the device will be moved to.
 Specifies the domain in which to query for the computer given to the ComputerName parameter. If left blank it will query the domain of the currently logged on user.
 .PARAMETER Description
 By default this will append to the existing description of the computer object and append any text given to this parameter.
+.PARAMETER PSCredential
+Allows the use of alternate credentials in for form doman\user.
 .EXAMPLE
-Disable-ADComputer -ComputerName computer1 -DisabledOU 'OU=Computers,OU=Disabled Accounts,DC=domain,DC=com' -Description "CR00001' -Domain domain.forest.com -Verbose -whatif
+Disable-ADComputer -Identity computer1 -DisabledOU 'OU=Computers,OU=Disabled Accounts,DC=domain,DC=com' -Description "CR00001' -Domain domain.forest.com -Verbose -whatif
+.EXAMPLE
+Disable-ADComputer -Identity computer1 -PSCredential domain\user -Description "CR00002" -verbose
 #>
     [CmdletBinding(SupportsShouldProcess=$True,ConfirmImpact='Medium')]
     param(
