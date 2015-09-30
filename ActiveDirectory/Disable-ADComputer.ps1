@@ -19,10 +19,10 @@ Disable-ADComputer -ComputerName computer1 -DisabledOU 'OU=Computers,OU=Disabled
     [CmdletBinding(SupportsShouldProcess=$True,ConfirmImpact='Medium')]
     param(
         [Parameter(Mandatory = $true, ValueFromPipeline=$true)]
-        [string[]]$ComputerName,
+        [string[]]$Identity,
         [string]$DisabledOU,
         [string]$Domain = (Get-ADDomain).DNSroot,
-        [string]$Description,
+        [string]$Description = $null,
         [string]$ErrorLog = 'c:\retry.txt'
     )
     BEGIN {
@@ -33,7 +33,7 @@ Disable-ADComputer -ComputerName computer1 -DisabledOU 'OU=Computers,OU=Disabled
     
     PROCESS {
  
-        foreach($Computer in $ComputerName){
+        foreach($Computer in $Identity){
  
             Try {
 
@@ -53,7 +53,7 @@ Disable-ADComputer -ComputerName computer1 -DisabledOU 'OU=Computers,OU=Disabled
                     'Enabled' = $false
                 }
 
-                if ($Description) {$SetParms.Add('Description',$Description)}
+                if ($Description -ne ' ') {$SetParms.Add('Description',$Description)}
 
 
                 Write-Verbose "Disabling $Computer"
@@ -78,3 +78,5 @@ Disable-ADComputer -ComputerName computer1 -DisabledOU 'OU=Computers,OU=Disabled
         Write-Verbose "Finished"
     }
 }
+
+Disable-ADComputer -Identity ADLComp1 -Verbose -Description 'cr'
