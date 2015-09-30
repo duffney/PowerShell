@@ -93,5 +93,3 @@ Disable-ADComputer -ComputerName computer1 -DisabledOU 'OU=Computers,OU=Disabled
         Write-Verbose "Finished"
     }
 }
-
-Disable-ADComputer -Identity ADLComp1 -Verbose -Description 'cr' -PSCredential manticore\administrator
