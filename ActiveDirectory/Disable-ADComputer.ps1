@@ -5,7 +5,7 @@ Disables Computers and moves them to the specified OU.
 .DESCRIPTION
 Take string or object input for computers then disables each one and moves to the specified ou
 then outputs errors to a log file.
-.PARAMETER COMPUTERNAME
+.PARAMETER Identity
 Name of computer or computers
 .PARAMETER DisabledOU
 Specifies the Distinguished Name of the OU the device will be moved to.
@@ -33,12 +33,12 @@ Disable-ADComputer -ComputerName computer1 -DisabledOU 'OU=Computers,OU=Disabled
     
     PROCESS {
  
-        foreach($Computer in $Identity){
+        foreach($ID in $Identity){
  
             Try {
 
                 $GetParms = @{
-                    'Identity' = $Computer
+                    'Identity' = $ID
                     'Server' = $Domain
                 }
 
@@ -48,7 +48,7 @@ Disable-ADComputer -ComputerName computer1 -DisabledOU 'OU=Computers,OU=Disabled
                 $Description = $($ComputerInfo.Description) + " "+ $Description
 
                 $SetParms = @{
-                    'Identity' = $Computer
+                    'Identity' = $ID
                     'Server' = $Domain
                     'Enabled' = $false
                 }
@@ -56,13 +56,22 @@ Disable-ADComputer -ComputerName computer1 -DisabledOU 'OU=Computers,OU=Disabled
                 if ($Description -ne ' ') {$SetParms.Add('Description',$Description)}
 
 
-                Write-Verbose "Disabling $Computer"
+                Write-Verbose "Disabling $ID"
                 
                 Set-ADComputer @SetParms
 
-                Write-Verbose "Moving $Computer to $DisabledOU"
+                if ($DisabledOU){
 
-                Move-ADObject -Identity $($ComputerInfo.DistinguishedName) -TargetPath $DisabledOU -Server $Domain
+                    $MoveParms = @{
+                        'Identity' = $($ComputerInfo.DistinguishedName)
+                        'TargetPath' = $DisabledOU
+                        'Server' = $Domain
+                    }
+
+                    Write-Verbose "Moving $ID to $DisabledOU"
+
+                    Move-ADObject @MoveParms
+                }
                 
             }
             Catch [Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException]{
