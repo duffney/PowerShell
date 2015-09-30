@@ -23,12 +23,16 @@ Disable-ADComputer -ComputerName computer1 -DisabledOU 'OU=Computers,OU=Disabled
         [string]$DisabledOU,
         [string]$Domain = (Get-ADDomain).DNSroot,
         [string]$Description = $null,
-        [string]$ErrorLog = 'c:\retry.txt'
+        [string]$ErrorLog = 'c:\retry.txt',
+        $PSCredential
     )
     BEGIN {
         
         Write-Verbose "Starting Disable-ADComputer"
-    
+        if ($PSCredential){
+            $SecurePassword = Read-Host -Prompt "Enter Password" -AsSecureString
+            $PSCredential = New-Object System.Management.Automation.PSCredential -ArgumentList $PSCredential,$SecurePassword
+        }    
     }
     
     PROCESS {
@@ -43,6 +47,7 @@ Disable-ADComputer -ComputerName computer1 -DisabledOU 'OU=Computers,OU=Disabled
                 }
 
                 if ($Description) {$GetParms.Add('Properties','Description')}
+                if ($PSCredential) {$GetParms.Add('Credential',$PSCredential)}
 
                 $ComputerInfo = Get-ADComputer @GetParms
                 $Description = $($ComputerInfo.Description) + " "+ $Description
@@ -54,7 +59,7 @@ Disable-ADComputer -ComputerName computer1 -DisabledOU 'OU=Computers,OU=Disabled
                 }
 
                 if ($Description -ne ' ') {$SetParms.Add('Description',$Description)}
-
+                if ($PSCredential) {$SetParms.Add('Credential',$PSCredential)}
 
                 Write-Verbose "Disabling $ID"
                 
@@ -67,6 +72,7 @@ Disable-ADComputer -ComputerName computer1 -DisabledOU 'OU=Computers,OU=Disabled
                         'TargetPath' = $DisabledOU
                         'Server' = $Domain
                     }
+                    if ($PSCredential) {$MoveParms.Add('Credential',$PSCredential)}
 
                     Write-Verbose "Moving $ID to $DisabledOU"
 
@@ -88,4 +94,4 @@ Disable-ADComputer -ComputerName computer1 -DisabledOU 'OU=Computers,OU=Disabled
     }
 }
 
-Disable-ADComputer -Identity ADLComp1 -Verbose -Description 'cr'
+Disable-ADComputer -Identity ADLComp1 -Verbose -Description 'cr' -PSCredential manticore\administrator
