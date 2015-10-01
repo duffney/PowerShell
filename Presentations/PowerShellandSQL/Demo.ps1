@@ -15,12 +15,12 @@ $ComputerData = Get-DatabaseData -connectionString $ConnectionString -query "Sel
 #Problem Returns number of quries found
 $ComputerData
 $ComputerData = $ComputerData[1..$ComputerData.Length]
+$ComputerData
 
 #Take action on data from SQL
 Get-Service -ComputerName $ComputerData.Name -Name ADWS
 
 Foreach ($Computer in $ComputerData){
-    #Write-Output $Computer
     Get-ADComputer -Identity $Computer.DistinguishedName -Properties Location | select Name,Location
     Set-ADComputer -Identity $Computer.DistinguishedName -Location 'Omaha' -Verbose
     Get-ADComputer -Identity $Computer.DistinguishedName -Properties Location | select Name,Location
@@ -28,6 +28,7 @@ Foreach ($Computer in $ComputerData){
 
 ##Insert data to SQL
 $Computer = Get-ADComputer -Identity SQL01 -Properties LastLogonDate,OperatingSystem,Description
+$Computer
 
 $query = "Insert Into OmahaPSUG_Computers (SamAccountName,Name,SID,DistinguishedName,Domain,LastLogonDate,Description,OperatingSystem)
 Values ('$($Computer.SamAccountName)','$($Computer.Name)','$($Computer.SID)','$($Computer.DistinguishedName)','Manticore.org','$($Computer.LastLogonDate)','$($Computer.Description)','$($Computer.OperatingSystem)')"
@@ -38,7 +39,7 @@ Invoke-DatabaseQuery -connectionString $ConnectionString -query $query -isSQLSer
 
 #Insert Loop
 $Users = Get-ADUser -Filter * -Properties mail,LastLogonDate,Description,CanonicalName
-
+$Users
 foreach ($User in $Users){
 
     $Domain = $User.CanonicalName.Split('/')
@@ -66,8 +67,29 @@ Foreach ($UserPrincipalName in $UserPrincipalNames){
 }
 
 ##Load Copy-SQLTable function
-.\GitHub\PowerShell\SQL\Copy-SQLTable.ps1
+psEdit C:\GitHub\PowerShell\SQL\Copy-SQLTable.ps1
 
 ##Copy one table to another
 ##Blog post http://duffney.github.io/CopySQLTable/
 Copy-SQLTable -TableName 'OmahaPSUG_Computers' -SourceServer 'SQL01\SQLEXPRESS' -SourceDataBase 'OmahaPSUG' -TargetDatabase 'OmahaPSUG_BK' -TargetServer 'SQL01\SQLEXPRESS'
+
+##Solutions Thinking (Stale AD Groups)
+#Populate Groups
+$Groups = Get-ADGroup -Filter {GroupCategory -eq 'Security'} -Properties ManagedBy -SearchBase 'OU=Groups,DC=manticore,DC=org'| ?{@(Get-ADGroupMember $_).Length -eq 0} 
+#Get-ADGroup -Filter * -Properties ManagedBy,GroupCategory,GroupScope -SearchBase 'OU=Groups,DC=manticore,DC=org'
+
+foreach ($Group in $Groups){
+
+$MemberCount = (Get-ADGroupMember -Identity $Group.DistinguishedName).count
+if($Group.ManagedBy -ne $null){
+    $ManagedBy = (Get-ADUser -Identity $Group.ManagedBy).SamAccountName
+} else {$ManagedBy = ''}
+
+$query = "Insert Into OmahaPSUG_StaleGroups (SamAccountName,DistinguishedName,GroupCategory,GroupScope,MemberCount,ManagedBy)
+Values ('$($Group.SamAccountName)','$($Group.DistinguishedName)','$($Group.GroupCategory)','$($Group.GroupScope)','$($MemberCount)','$($Managedby)')"
+
+Invoke-DatabaseQuery -connectionString $ConnectionString -query $query -isSQLServer
+
+}
+
+#Email Manager, Delete group update table 
