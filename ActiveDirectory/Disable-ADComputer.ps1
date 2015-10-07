@@ -27,7 +27,6 @@ Disable-ADComputer -Identity computer1 -PSCredential domain\user -Description "C
         [string]$DisabledOU,
         [string]$Domain = (Get-ADDomain).DNSroot,
         [string]$Description = $null,
-        [ValidateScript({Test-Path $_ -PathType 'Container'})] 
         [string]$ErrorLog = 'c:\retry.txt',
         $PSCredential
     )
