@@ -5,12 +5,12 @@ Import-Module SQLcmdlets
 $ConnectionString = "server=SQL01\SQLEXPRESS;database=OmahaPSUG;trusted_connection=true"
 
 #Get data from SQL with PowerShell
-Get-DatabaseData -connectionString $ConnectionString -query "Select * from OmahaPSUG_Computers" -isSQLServer
+Get-DatabaseData -connectionString $ConnectionString -query "Select * from OmahaPSUG_Computers"
 
-Get-DatabaseData -connectionString $ConnectionString -query "Select Name from OmahaPSUG_Computers" -isSQLServer
+Get-DatabaseData -connectionString $ConnectionString -query "Select Name from OmahaPSUG_Computers"
 
 #Create object with SQL data
-$ComputerData = Get-DatabaseData -connectionString $ConnectionString -query "Select * from OmahaPSUG_Computers" -isSQLServer
+$ComputerData = Get-DatabaseData -connectionString $ConnectionString -query "Select * from OmahaPSUG_Computers"
 
 #Problem Returns number of quries found
 $ComputerData
@@ -33,7 +33,7 @@ $Computer
 $query = "Insert Into OmahaPSUG_Computers (SamAccountName,Name,SID,DistinguishedName,Domain,LastLogonDate,Description,OperatingSystem)
 Values ('$($Computer.SamAccountName)','$($Computer.Name)','$($Computer.SID)','$($Computer.DistinguishedName)','Manticore.org','$($Computer.LastLogonDate)','$($Computer.Description)','$($Computer.OperatingSystem)')"
 
-Invoke-DatabaseQuery -connectionString $ConnectionString -query $query -isSQLServer
+Invoke-DatabaseQuery -connectionString $ConnectionString -query $query
 
 ##Show SQL OmahaPSUG_Computers table
 
@@ -48,7 +48,7 @@ foreach ($User in $Users){
     $query = "Insert Into OmahaPSUG_Users (SamAccountName,UserPrincipalName,SID,Mail,DistinguishedName,Domain,LastLogonDate,Description)
     Values ('$($User.SamAccountName)','$($User.UserPrincipalName)','$($User.SID)','$($Computer.Mail)','$($User.DistinguishedName)','$Domain','$($User.LastLogonDate)','$($User.Description)')"
 
-    Invoke-DatabaseQuery -connectionString $ConnectionString -query $query -isSQLServer
+    Invoke-DatabaseQuery -connectionString $ConnectionString -query $query
 
 }
 
@@ -56,13 +56,13 @@ foreach ($User in $Users){
 
 #Get & Update SQL data
 
-$UserPrincipalNames = (Get-DatabaseData -connectionString $ConnectionString -query "Select UserPrincipalName from OmahaPSUG_Users Where UserPrincipalName <> ' '" -isSQLServer).UserPrincipalName
+$UserPrincipalNames = (Get-DatabaseData -connectionString $ConnectionString -query "Select UserPrincipalName from OmahaPSUG_Users Where UserPrincipalName <> ' '").UserPrincipalName
 
 Foreach ($UserPrincipalName in $UserPrincipalNames){
 
     $UpdateQuery = "Update OmahaPSUG_Users SET Mail = '$($UserPrincipalName)' where UserPrincipalName = '$($UserPrincipalName)'"
 
-    Invoke-DatabaseQuery -connectionString $ConnectionString -query $UpdateQuery -isSQLServer
+    Invoke-DatabaseQuery -connectionString $ConnectionString -query $UpdateQuery
 
 }
 
@@ -88,7 +88,7 @@ if($Group.ManagedBy -ne $null){
 $query = "Insert Into OmahaPSUG_StaleGroups (SamAccountName,DistinguishedName,GroupCategory,GroupScope,MemberCount,ManagedBy)
 Values ('$($Group.SamAccountName)','$($Group.DistinguishedName)','$($Group.GroupCategory)','$($Group.GroupScope)','$($MemberCount)','$($Managedby)')"
 
-Invoke-DatabaseQuery -connectionString $ConnectionString -query $query -isSQLServer
+Invoke-DatabaseQuery -connectionString $ConnectionString -query $query
 
 }
 

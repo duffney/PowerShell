@@ -36,7 +36,7 @@ Param(
 $SourceConnectionString = "server=$SourceServer;database=$SourceDataBase;trusted_connection=true"
 $TargetConnectionString = "server=$TargetServer;database=$TargetDatabase;trusted_connection=true"
 
-$Data = Get-DatabaseData -connectionString $SourceConnectionString -query "Select * from $TableName" -isSQLServer
+$Data = Get-DatabaseData -connectionString $SourceConnectionString -query "Select * from $TableName"
 $Data = $Data[1..($Data.Count)]
 
 $Columns = (Get-DatabaseData -connectionString $SourceConnectionString -query "SELECT COLUMN_NAME FROM $SourceDataBase.information_schema.columns WHERE  table_name = '$TableName' ORDER  BY ORDINAL_POSITION" -isSQLServer).Column_Name
@@ -56,6 +56,6 @@ $InsertColumns=$InsertColumns.Trim(',')
             $Values = $null
 
 
-        Invoke-DatabaseQuery -connectionString $TargetConnectionString -query $query -isSQLServer
+        Invoke-DatabaseQuery -connectionString $TargetConnectionString -query $query
     }
 }

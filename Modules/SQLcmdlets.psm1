@@ -2,28 +2,16 @@ function Get-DatabaseData {
     [CmdletBinding()]
     param (
         [string]$connectionString,
-        [string]$query,
-        [switch]$isSQLServer
+        [string]$query
     )
-    if ($isSQLServer) {
-        Write-Verbose 'in SQL Server mode'
-        $connection = New-Object -TypeName `
-            System.Data.SqlClient.SqlConnection
-    } else {
-        Write-Verbose 'in OleDB mode'
-        $connection = New-Object -TypeName `
-            System.Data.OleDb.OleDbConnection
-    }
+
+    $connection = New-Object -TypeName System.Data.SqlClient.SqlConnection
+    
     $connection.ConnectionString = $connectionString
     $command = $connection.CreateCommand()
     $command.CommandText = $query
-    if ($isSQLServer) {
-        $adapter = New-Object -TypeName `
-        System.Data.SqlClient.SqlDataAdapter $command
-    } else {
-        $adapter = New-Object -TypeName `
-        System.Data.OleDb.OleDbDataAdapter $command
-    }
+    $adapter = New-Object -TypeName System.Data.SqlClient.SqlDataAdapter $command
+
     $dataset = New-Object -TypeName System.Data.DataSet
     $adapter.Fill($dataset)
     $dataset.Tables[0]
@@ -35,18 +23,11 @@ function Invoke-DatabaseQuery {
                    ConfirmImpact='Low')]
     param (
         [string]$connectionString,
-        [string]$query,
-        [switch]$isSQLServer
+        [string]$query
     )
-    if ($isSQLServer) {
-        Write-Verbose 'in SQL Server mode'
-        $connection = New-Object -TypeName `
-            System.Data.SqlClient.SqlConnection
-    } else {
-        Write-Verbose 'in OleDB mode'
-        $connection = New-Object -TypeName `
-            System.Data.OleDb.OleDbConnection
-    }
+
+    $connection = New-Object -TypeName System.Data.SqlClient.SqlConnection
+
     $connection.ConnectionString = $connectionString
     $command = $connection.CreateCommand()
     $command.CommandText = $query
