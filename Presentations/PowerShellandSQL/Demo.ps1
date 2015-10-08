@@ -75,7 +75,7 @@ Copy-SQLTable -TableName 'OmahaPSUG_Computers' -SourceServer 'SQL01\SQLEXPRESS' 
 
 ##Solutions Thinking (Stale AD Groups)
 #Populate Groups
-$Groups = Get-ADGroup -Filter {GroupCategory -eq 'Security'} -Properties ManagedBy -SearchBase 'OU=Groups,DC=manticore,DC=org'| ?{@(Get-ADGroupMember $_).Length -eq 0} 
+$Groups = Get-ADGroup -Filter {GroupCategory -eq 'Security'} -Properties ManagedBy -SearchBase 'OU=ADMLGroups,DC=manticore,DC=org'| ?{@(Get-ADGroupMember $_).Length -eq 0} 
 #Get-ADGroup -Filter * -Properties ManagedBy,GroupCategory,GroupScope -SearchBase 'OU=Groups,DC=manticore,DC=org'
 
 foreach ($Group in $Groups){

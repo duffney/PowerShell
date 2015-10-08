@@ -39,7 +39,7 @@ $TargetConnectionString = "server=$TargetServer;database=$TargetDatabase;trusted
 $Data = Get-DatabaseData -connectionString $SourceConnectionString -query "Select * from $TableName"
 $Data = $Data[1..($Data.Count)]
 
-$Columns = (Get-DatabaseData -connectionString $SourceConnectionString -query "SELECT COLUMN_NAME FROM $SourceDataBase.information_schema.columns WHERE  table_name = '$TableName' ORDER  BY ORDINAL_POSITION" -isSQLServer).Column_Name
+$Columns = (Get-DatabaseData -connectionString $SourceConnectionString -query "SELECT COLUMN_NAME FROM $SourceDataBase.information_schema.columns WHERE  table_name = '$TableName' ORDER  BY ORDINAL_POSITION").Column_Name
 
     foreach ($c in $Columns){$InsertColumns += $c+','}
 
