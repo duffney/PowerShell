@@ -1,16 +1,14 @@
-$Name = 'SQL01'
-$SwitchName = 'LAN'
+$Name = 'HDC01'
+$SwitchName = 'Internal'
 $HardDiskSize = 32GB
-$HDPath = 'C:\Hyper-V\Virtual Machines'+'\'+$Name+'.vhdx'
+$HDPath = 'E:\Hyper-V\Virtual Hard Disks'+'\'+$Name+'.vhdx'
 $Generation = '2'
+$ISO_Path = 'D:\ISOs\10514.0.150808-1529.TH2_RELEASE_SERVER_OEMRET_X64FRE_EN-US.ISO'
 
-$VMparams = @{
-'NewVHDPath' = 'SQL01'
-'NewVHDSizeBytes' = 32GB
-'Generation' = '2'
-'Name' = 'c:\Hypver-V\Virtual Machines'+'\'+$Name+'.vhdx'
-'SwitchName' = 'LAN'
-}
+New-VM -Name $Name -SwitchName $SwitchName `
+-NewVHDSizeBytes $HardDiskSize `
+-NewVHDPath $HDPath -Generation $Generation
+
+Add-VMDvdDrive -VMName $Name -Path $ISO_Path
 
 
-New-VM @VMparams
