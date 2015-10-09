@@ -1,0 +1,1 @@
+New-VMSwitch -NetAdapterName 'Wi-Fi' -Name 'External'
