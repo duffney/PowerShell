@@ -1,7 +1,7 @@
-$Name = 'HDC01'
+$Name = 'ADMT01'
 $SwitchName = 'Internal'
 $HardDiskSize = 32GB
-$HDPath = 'E:\Hyper-V\Virtual Hard Disks'+'\'+$Name+'.vhdx'
+$HDPath = 'F:\Hyper-V\Virtual Hard Disks'+'\'+$Name+'.vhdx'
 $Generation = '2'
 $ISO_Path = 'D:\ISOs\10514.0.150808-1529.TH2_RELEASE_SERVER_OEMRET_X64FRE_EN-US.ISO'
 
@@ -11,4 +11,6 @@ New-VM -Name $Name -SwitchName $SwitchName `
 
 Add-VMDvdDrive -VMName $Name -Path $ISO_Path
 
+break
 
+Get-NetFirewallProfile | Set-NetFirewallProfile -Enabled false #disable firewall
