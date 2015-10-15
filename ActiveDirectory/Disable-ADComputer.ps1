@@ -32,10 +32,10 @@ Disable-ADComputer -Identity computer1 -PSCredential domain\user -Description "C
     )
     BEGIN {
         
-        Write-Verbose "Starting Disable-ADComputer"
+        Write-Verbose -Message "Starting Disable-ADComputer"
         if ($PSCredential){
             $SecurePassword = Read-Host -Prompt "Enter Password" -AsSecureString
-            $PSCredential = New-Object System.Management.Automation.PSCredential -ArgumentList $PSCredential,$SecurePassword
+            $PSCredential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $PSCredential,$SecurePassword
         }    
     }
     
@@ -65,7 +65,7 @@ Disable-ADComputer -Identity computer1 -PSCredential domain\user -Description "C
                 if ($Description -ne ' ') {$SetParms.Add('Description',$Description)}
                 if ($PSCredential) {$SetParms.Add('Credential',$PSCredential)}
 
-                Write-Verbose "Disabling $ID"
+                Write-Verbose -Message "Disabling $ID"
                 
                 Set-ADComputer @SetParms
 
@@ -78,22 +78,22 @@ Disable-ADComputer -Identity computer1 -PSCredential domain\user -Description "C
                     }
                     if ($PSCredential) {$MoveParms.Add('Credential',$PSCredential)}
 
-                    Write-Verbose "Moving $ID to $DisabledOU"
+                    Write-Verbose -Message "Moving $ID to $DisabledOU"
 
                     Move-ADObject @MoveParms
                 }
                 
             }
             Catch [Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException]{
-                Write-Warning "$Computer was not found"
-                Write-Output $Computer | Out-File $ErrorLog
+                Write-Warning -Message "$Computer was not found"
+                Write-Output  -InputObject $Computer | Out-File $ErrorLog
             }
             Catch {
-                Write-Warning $_.Exception.Message
+                Write-Warning -Message $_.Exception.Message
             }
         }
     }
     END {
-        Write-Verbose "Finished"
+        Write-Verbose -Message "Finished"
     }
 }
