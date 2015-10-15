@@ -32,7 +32,7 @@ foreach ($dc in $dcs) {
 
   # perfrom AD lookup
   $ADlookup = $null
-  $ADlookup = Get-ADUser –Identity "richard" –Server $dc
+  $ADlookup = Get-ADUser –Identity "jduffney" –Server $dc
   
   if ($ADlookup)
   {

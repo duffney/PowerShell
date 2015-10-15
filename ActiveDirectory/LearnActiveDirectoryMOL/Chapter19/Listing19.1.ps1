@@ -11,10 +11,10 @@ Get-ADComputer -SearchBase "OU=Domain Controllers,DC=Manticore,DC=org"  -Filter 
 foreach {
   Get-ADDomainController -Identity $_.DNSHostName     
  } | 
- where Site -eq 'Site1' |                     
+ where Site -eq 'Default-First-Site-Name' |                     
  foreach {
     if (Test-Connection -ComputerName $psitem.Name -Quiet -Count 1){
-      Get-ADReplicationFailure -Target server02                    
+      Get-ADReplicationFailure -Target DC01                    
     }
     else {
       Write-Warning -Message "Cannot contact $($psitem.Name)"       
