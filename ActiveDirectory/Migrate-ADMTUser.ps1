@@ -147,16 +147,16 @@ $admtStatusErrors    = "2"
 
 #Creates an instance of an ADMT migration object using the COM-object provided with ADMT
 $Migration = New-Object -ComObject "ADMT.Migration"
-$Migration.IntraForest = $false
-$Migration.SourceDomain = "contoso-old.local"
-$Migration.SourceDomainController = "dc01.contoso-old.local"
-$Migration.SourceOU = "Europe/Norway/Oslo"
-$Migration.TargetDomain = "contoso-new.local"
-$Migration.TargetDomainController = "dc02.contoso-new.local"
-$Migration.TargetOU = "Europe/Norway/Oslo"
-$Migration.PasswordOption = $admtComplexPassword
-$Migration.PasswordServer = "dc01.contoso-old.local"
-$Migration.PasswordFile = "C:\WINDOWS\ADMT\Logs\Passwords.txt"
+$Migration.IntraForest = $true
+$Migration.SourceDomain = "hydra.manticore.org"
+$Migration.SourceDomainController = "HDC02.Hydra.manticore.org"
+$Migration.SourceOU = "Users"
+$Migration.TargetDomain = "manticore.org"
+$Migration.TargetDomainController = "dc01.manticore.org"
+$Migration.TargetOU = "Users"
+#$Migration.PasswordOption = $admtComplexPassword
+#$Migration.PasswordServer = "dc01.contoso-old.local"
+#$Migration.PasswordFile = "C:\WINDOWS\ADMT\Logs\Passwords.txt"
 $Migration.ConflictOptions = $admtIgnoreConflicting
 $Migration.UserPropertiesToExclude = ""
 $Migration.InetOrgPersonPropertiesToExclude = ""
@@ -171,7 +171,7 @@ $Migration.CommandLine = $false
 $UserMigration = $Migration.CreateUserMigration()
 $UserMigration.DisableOption = $admtTargetSameAsSource
 $UserMigration.SourceExpiration = $admtNoExpiration
-$UserMigration.MigrateSIDs = $true
+$UserMigration.MigrateSIDs = $false
 $UserMigration.TranslateRoamingProfile = $false
 $UserMigration.UpdateUserRights = $false
 $UserMigration.MigrateGroups = $false
@@ -183,10 +183,10 @@ $UserMigration.MigrateServiceAccounts = $false
 $UserMigration.Migrate($admtData,$samaccountname,$null)
 
 #Creates a password migration object
-$PasswordMigration = $Migration.CreatePasswordMigration()
+#$PasswordMigration = $Migration.CreatePasswordMigration()
 
 #Initiates password migration. Logs are written to C:\Windows\ADMT\Logs by default.
-$PasswordMigration.Migrate($admtData,$samaccountname,$null)
+#$PasswordMigration.Migrate($admtData,$samaccountname,$null)
 
 
 }
