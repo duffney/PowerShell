@@ -85,8 +85,8 @@ Disable-ADComputer -Identity computer1 -PSCredential domain\user -Description "C
                 
             }
             Catch [Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException]{
-                Write-Warning -Message "$Computer was not found"
-                Write-Output  -InputObject $Computer | Out-File $ErrorLog
+                Write-Warning -Message "$Identity was not found"
+                Write-Output  -InputObject $Identity | Out-File $ErrorLog
             }
             Catch {
                 Write-Warning -Message $_.Exception.Message
