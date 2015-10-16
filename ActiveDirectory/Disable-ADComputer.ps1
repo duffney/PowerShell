@@ -27,7 +27,7 @@ Disable-ADComputer -Identity computer1 -PSCredential domain\user -Description "C
         [string]$DisabledOU,
         [string]$Domain = (Get-ADDomain).DNSroot,
         [string]$Description = $null,
-        [string]$ErrorLog = 'c:\retry.txt',
+        [string]$ErrorLog = "$env:SystemDrive\retry.txt",
         $PSCredential
     )
     BEGIN {
