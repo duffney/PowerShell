@@ -40,8 +40,9 @@ Disable-ADComputer -Identity computer1 -PSCredential domain\user -Description "C
     }
     
     PROCESS {
- 
+
         foreach($ID in $Identity){
+                
  
             Try {
 
