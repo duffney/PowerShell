@@ -1,4 +1,16 @@
 function Get-DatabaseData {
+<#
+.SYNOPSIS
+Executes a query statement against a SQL database table.
+.DESCRIPTION
+Executes a SQL query statement against a SQL database to retreive information specified by the
+query parameter.
+.PARAMETER connectionString
+
+.PARAMETER query
+.EXAMPLE
+Disable-ADComputer -Identity computer1 -PSCredential domain\user -Description "CR00002" -verbose
+#>
     [CmdletBinding()]
     param (
         [string]$connectionString,
