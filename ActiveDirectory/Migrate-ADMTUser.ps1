@@ -40,13 +40,32 @@ Migrate-ADMTUser -samaccountname JDoe
 .NOTES
 AUTHOR:    Jan Egil Ring
 BLOG:      http://blog.powershell.no
-LASTEDIT:  04.08.2010
+Editing Author:  Josh Duffney
+LastUpdated: 10.22.2015
 #>
 
 [CmdletBinding()]
     param (
         [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true)]
-        [string]$samaccountname
+        [string]$samaccountname,
+        
+        [parameter(Mandatory=$true)]
+        [string]$SourceDomain,
+        
+        [parameter(Mandatory=$true)]
+        [string]$SourceDomainController,
+
+        [parameter(Mandatory=$true)]
+        [string]$SourceOU,
+
+        [parameter(Mandatory=$true)]
+        [string]$TargetDomain,
+
+        [parameter(Mandatory=$true)]
+        [string]$TargetDomainController,
+        
+        [parameter(Mandatory=$true)]
+        [string]$TargetOU
     )
 
 
@@ -148,12 +167,12 @@ $admtStatusErrors    = "2"
 #Creates an instance of an ADMT migration object using the COM-object provided with ADMT
 $Migration = New-Object -ComObject "ADMT.Migration"
 $Migration.IntraForest = $true
-$Migration.SourceDomain = "hydra.manticore.org"
-$Migration.SourceDomainController = "HDC02.Hydra.manticore.org"
-$Migration.SourceOU = "Users"
-$Migration.TargetDomain = "manticore.org"
-$Migration.TargetDomainController = "dc01.manticore.org"
-$Migration.TargetOU = "Users"
+$Migration.SourceDomain = $SourceDomain
+$Migration.SourceDomainController = $SourceDomainController
+$Migration.SourceOU = $SourceOU
+$Migration.TargetDomain = $TargetDomain
+$Migration.TargetDomainController = $TargetDomainController
+$Migration.TargetOU = $TargetOU
 #$Migration.PasswordOption = $admtComplexPassword
 #$Migration.PasswordServer = "dc01.contoso-old.local"
 #$Migration.PasswordFile = "C:\WINDOWS\ADMT\Logs\Passwords.txt"

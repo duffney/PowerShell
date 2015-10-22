@@ -8,13 +8,13 @@
  
 #>
 $secpass = Read-Host "Password" -AsSecureString 
-Import-Csv names.csv |
+Import-Csv c:\temp\names.csv |
 foreach {
-  $name = "$($_.LastName) $($_.FirstName)"
+  $name = "$($_.FirstName) $($_.LastName)"
    
  New-ADUser -GivenName $($_.FirstName) -Surname $($_.LastName) `
  -Name $name -SamAccountName $($_.SamAccountName) `
  -UserPrincipalName "$($_.SamAccountName)@manticore.org" `
  -AccountPassword $secpass -Path "cn=Users,dc=Manticore,dc=org" `
- -Enabled:$true
+ -Enabled:$true -Server hydra.manticore.org -Credential hydra\administrator
 }
