@@ -35,6 +35,21 @@ Get-DatabaseData -ConnectString 'server=SQL01\SQLEXPRESS;database=OmahaPSUG;trus
 }
 
 function Invoke-DatabaseQuery {
+<#
+.SYNOPSIS
+Executes a nonquery statement against a SQL database table.
+.DESCRIPTION
+Executes a SQL nonquery statement against a SQL database to insert or update information 
+specified by the query parameter.
+.PARAMETER connectionString
+Specifies a trust or untrusted string to connect to a SQL database
+.PARAMETER query
+Specifies a nonquery statement to SQL
+.EXAMPLE
+Invoke-DatabaseData -ConnectString 'server=SQL01\SQLEXPRESS;database=OmahaPSUG;trusted_connection=true' -query "Insert Into Computers ('ComputerName') Values ('PC01')"
+.EXAMPLE
+Invoke-DatabaseData -ConnectString 'server=SQL01\SQLEXPRESS;database=OmahaPSUG;trusted_connection=true' -query "Insert Into Computers ('ComputerName','OperatingSystem') Values ('PC01','Win10')"
+#>
     [CmdletBinding(SupportsShouldProcess=$True,
                    ConfirmImpact='Low')]
     param (
