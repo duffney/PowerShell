@@ -6,10 +6,14 @@ Executes a query statement against a SQL database table.
 Executes a SQL query statement against a SQL database to retreive information specified by the
 query parameter.
 .PARAMETER connectionString
-
+Specifies a trust or untrusted string to connect to a SQL database
 .PARAMETER query
+Specifies a query statement to SQL
 .EXAMPLE
-Disable-ADComputer -Identity computer1 -PSCredential domain\user -Description "CR00002" -verbose
+Get-DatabaseData -ConnectString 'server=SQL01\SQLEXPRESS;database=OmahaPSUG;trusted_connection=true' -query 'select * from Computers'
+.EXAMPLE
+Get-DatabaseData -ConnectString 'server=SQL01\SQLEXPRESS;database=OmahaPSUG;trusted_connection=true' `
+-query 'select OperatingSystem Where ComputerName = 'PC01'
 #>
     [CmdletBinding()]
     param (
