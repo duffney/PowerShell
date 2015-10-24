@@ -5,4 +5,5 @@
 'TargetDomain' = "manticore.org"
 'TargetDomainController' = "dc01.manticore.org"
 'TargetOU' = "Users"
+'SamAccountName' = 'ADMT-User06'
 }
