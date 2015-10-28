@@ -16,25 +16,25 @@ param(
     [string]$TargetGroup
 )
 BEGIN {
-    Write-Verbose "Gathering all Member of objects"
+    Write-Verbose -message "Gathering all Member of objects"
     $Groups = (Get-ADGroup -Identity $TargetGroup -Properties *).Memberof            
 }
 PROCESS {
    foreach ($Group in $Groups) {
         Try {
-            Write-Verbose "Adding $Group as member"
+            Write-Verbose -message "Adding $Group as member"
             Add-ADGroupMember -Identity $TargetGroup -Members $Group
-            Write-Verbose "Removing $Group from Member of"
+            Write-Verbose -message "Removing $Group from Member of"
             Remove-ADGroupMember -Identity $Group -Members $TargetGroup -Confirm:$false
         }
         Catch [Microsoft.ActiveDirectory.Management.ADException] {
-            Write-Warning "$Group was already a member of $TargetGroup"
-            Write-Verbose "Removing $Group from Member of"
+            Write-Warning -message "$Group was already a member of $TargetGroup"
+            Write-Verbose -message "Removing $Group from Member of"
             Remove-ADGroupMember -Identity $Group -Members $TargetGroup -Confirm:$false
         }
     } 
 }
 END {
-    Write-Verbose "Migration of Member of to Member complete"
+    Write-Verbose -message "Migration of Member of to Member complete"
 }
 }
