@@ -1,4 +1,4 @@
-function Disable-ADComputer {
+﻿function Disable-ADComputer {
 <#
 .SYNOPSIS
 Disables Computers and moves them to the specified OU.
