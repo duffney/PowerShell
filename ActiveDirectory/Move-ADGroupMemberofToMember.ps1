@@ -1,7 +1,7 @@
 function Move-ADGroupMemberofToMember {
 <#
 .SYNOPSIS
-Moves all Member Of Groups to the Members section of an Active Directory group.
+Moves all Member Of objects to the Members section of an Active Directory group.
 .DESCRIPTION
 Queries an Active Directory group for all Member Of groups then add them to the members section
 and removes them from the member of section of the active directory group.
@@ -17,7 +17,7 @@ param(
 )
 BEGIN {
     Write-Verbose -message "Gathering all Member of objects"
-    $Groups = (Get-ADGroup -Identity $TargetGroup -Properties *).Memberof            
+    $Groups = (Get-ADGroup -Identity $TargetGroup -Properties *).Memberof
 }
 PROCESS {
    foreach ($Group in $Groups) {
@@ -32,7 +32,7 @@ PROCESS {
             Write-Verbose -message "Removing $Group from Member of"
             Remove-ADGroupMember -Identity $Group -Members $TargetGroup -Confirm:$false
         }
-    } 
+    }
 }
 END {
     Write-Verbose -message "Migration of Member of to Member complete"
