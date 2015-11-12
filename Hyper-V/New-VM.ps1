@@ -1,4 +1,4 @@
-$Name = 'ADMT01'
+$Name = 'RDC02'
 $SwitchName = 'Internal'
 $HardDiskSize = 32GB
 $HDPath = 'F:\Hyper-V\Virtual Hard Disks'+'\'+$Name+'.vhdx'
@@ -7,10 +7,17 @@ $ISO_Path = 'D:\ISOs\10514.0.150808-1529.TH2_RELEASE_SERVER_OEMRET_X64FRE_EN-US.
 
 New-VM -Name $Name -SwitchName $SwitchName `
 -NewVHDSizeBytes $HardDiskSize `
--NewVHDPath $HDPath -Generation $Generation
+-NewVHDPath $HDPath -Generation $Generation -MemoryStartupBytes 1024MB
 
 Add-VMDvdDrive -VMName $Name -Path $ISO_Path
 
+
+$MyDVD = Get-VMDvdDrive $Name
+$MyHD = Get-VMHardDiskDrive $Name
+$MyNIC = Get-VMNetworkAdapter $Name
+
+Set-VMFirmware $Name -BootOrder $MyDVD,$MyHD,$MyNIC
+Set-VMMemory $Name -DynamicMemoryEnabled $false
 break
 
-Get-NetFirewallProfile | Set-NetFirewallProfile -Enabled false #disable firewall
+#Get-NetFirewallProfile | Set-NetFirewallProfile -Enabled false #disable firewall
