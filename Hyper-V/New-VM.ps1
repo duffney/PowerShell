@@ -20,4 +20,5 @@ Set-VMFirmware $Name -BootOrder $MyDVD,$MyHD,$MyNIC
 Set-VMMemory $Name -DynamicMemoryEnabled $false
 break
 
+#New-NetIPAddress –InterfaceIndex 12 –IPAddress -192.0.2.2 –PrefixLength 24 –DefaultGateway -192.0.2.1
 #Get-NetFirewallProfile | Set-NetFirewallProfile -Enabled false #disable firewall
