@@ -13,8 +13,9 @@
     Import-DscResource –ModuleName PSDesiredStateConfiguration
     Import-DscResource -Module xNetworking
     Import-DscResource -module xDHCpServer
-    Import-DscResource -Module xComputerManagement 
- 
+    Import-DscResource -Module xComputerManagement
+    Import-DscResource -Module xTimeZone
+    
             
     Node $AllNodes.Where{$_.Role -eq "Primary DC"}.Nodename             
     {             
@@ -26,6 +27,12 @@
             RebootNodeIfNeeded = $true            
         }
         
+        xTimeZone SystemTimeZone {
+            TimeZone = 'Central Standard Time'
+            IsSingleInstance = 'Yes'
+
+        }
+
         xComputer NewName
         {
             Name = $NewName
