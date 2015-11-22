@@ -121,6 +121,7 @@
          DnsDomain = 'zephyr.org'
          DnsServerIPAddress = '192.168.2.30'
          AddressFamily = 'IPv4'
+         Router = '192.168.2.1'
      }                    
             
     }             
