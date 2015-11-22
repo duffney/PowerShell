@@ -1,9 +1,9 @@
-$Name = 'RWin702'
+$Name = Read-Host
 $SwitchName = 'Internal'
 $HardDiskSize = 32GB
-$HDPath = 'F:\Hyper-V\Virtual Hard Disks'+'\'+$Name+'.vhdx'
-$Generation = '1'
-$ISO_Path = 'D:\ISOs\10514.0.150808-1529.TH2_RELEASE_SERVER_OEMRET_X64FRE_EN-US.ISO'
+$HDPath = 'C:\Hyper-V\Virtual Hard Disks'+'\'+$Name+'.vhdx'
+$Generation = '2'
+$ISO_Path = 'C:\Hyper-V\ISO\WindowsServer2016TechnicalPreview4.ISO'
 
 New-VM -Name $Name -SwitchName $SwitchName `
 -NewVHDSizeBytes $HardDiskSize `
@@ -18,6 +18,7 @@ $MyNIC = Get-VMNetworkAdapter $Name
 
 Set-VMFirmware $Name -BootOrder $MyDVD,$MyHD,$MyNIC
 Set-VMMemory $Name -DynamicMemoryEnabled $false
+
 break
 
 #New-NetIPAddress –InterfaceIndex 12 –IPAddress -192.0.2.2 –PrefixLength 24 –DefaultGateway -192.0.2.1
