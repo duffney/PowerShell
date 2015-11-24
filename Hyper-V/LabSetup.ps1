@@ -2,7 +2,7 @@ Get-NetAdapter | Select Name,MacAddress #Select NetAdpter with internet access
 New-VMSwitch -NetAdapterName 'Wi-Fi' -Name 'External' #Create External internet providing Hyper-v adapter
 New-VMSwitch -SwitchType Internal -Name 'Internal'
 
-$Servers = 'GW01','ZDC01','RDC01'
+$Servers = 'ZDC01','HDC01'
 
 Foreach ($Server in $Servers){
     $Name = $Server
@@ -29,4 +29,15 @@ Foreach ($Server in $Servers){
     Start-VM -vm $Server
 }
 
-#Install-ADDSDomain -Credential (Get-Credential manticore\zephyr) -NewDomainName Hydra -ParentDomainName manticore.org -SkipPreChecks -SafeModeAdministratorPassword (($PWD = '')|ConvertTo-SecureString -AsPlainText -Force) -DomainType ChildDomain -NewDomainNetbiosName hydra
+$Name = 'Win7'
+$SwitchName = 'Internal'
+$HardDiskSize = 32GB
+$HDPath = 'C:\Hyper-V\Virtual Hard Disks'+'\'+$Name+'.vhdx'
+$Generation = '1'
+$ISO_Path = 'C:\Hyper-V\ISO\Windows7ProfessionalSP1x64t.iso'
+
+New-VM -Name $Name -SwitchName $SwitchName `
+-NewVHDSizeBytes $HardDiskSize `
+-NewVHDPath $HDPath -Generation $Generation -MemoryStartupBytes 1024MB
+
+Add-VMDvdDrive -VMName $Name -Path $ISO_Path
