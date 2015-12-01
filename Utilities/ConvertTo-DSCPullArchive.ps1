@@ -6,6 +6,10 @@
 .DESCRIPTION
    Converts PowerShell Modules to compressed .zip files
    used by Desired State Configuraiton pull servers.
+.PARAMETER Source
+    Specifies the source location of a PowerShell module.
+.PARAMETER Destination
+    Specifies the destination that the compressed module will be placed. 
 .EXAMPLE
     ConvertTo-DSCPullArchive -Source "C:\LabResources\xTimeZone" -destination 'c:\temp'
 .EXAMPLE
@@ -19,7 +23,7 @@
                    ValueFromPipelineByPropertyName=$true,
                    Position=0)]
         $Source,
-        $destination
+        $Destination
     )
 
     Begin
@@ -31,16 +35,33 @@
     }
     Process
     {
-        New-Item -Path ($destination+'\'+$ModuleName) -ItemType Directory
-        Get-ChildItem ($source+'\'+$Version) | Copy-Item -Destination ($destination+'\'+$ModuleName)
-        
+        New-Item -Path ($destination+'\'+$ResoureName) -ItemType Directory
+        $Copy = Get-Item -Path ($destination+'\'+$ResoureName) 
+        Get-ChildItem ($source+'\'+$Version) | Copy-Item -Destination ($destination+'\'+$ResoureName)
         If(Test-path $destinationZip) {Remove-item $destinationZip -Force}
-        Add-Type -assembly "system.io.compression.filesystem"
-        [io.compression.zipfile]::CreateFromDirectory(($destination+'\'+$ModuleName), $destinationZip)
+        
+        Set-Content -path $destinationZip -value ("PK" + [char]5 + [char]6 + ("$([char]0)" * 18)) -ErrorAction Stop
+        
+        $zipfile = Get-Item $destinationZip
+        $zipfile.IsReadOnly = $false
+        
+        Write-Verbose "Creating Shell.Application"
+        $shellApp = New-Object -com shell.application
+        
+        Write-Verbose "Using namespace $($zipfile.fullname)" 
+        $zipPackage = $shellApp.NameSpace($zipfile.fullname)
+        
+        
+        $target = Get-Item -Path $Copy
+        
+        $zipPackage.CopyHere($target.FullName) 
+        
+        Start-Sleep -Milliseconds 200
+        
         New-DscCheckSum -ConfigurationPath $destinationZip -OutPath $destination -Verbose -Force
     }
     End
     {
-        Remove-Item -Path ($destination+'\'+$ModuleName) -Confirm:$false -Recurse
+        Remove-Item -Path ($destination+'\'+$ResoureName) -Confirm:$false -Recurse
     }
 }
