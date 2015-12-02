@@ -18,7 +18,7 @@ Allows the use of alternate credentials in for form doman\user.
 .EXAMPLE
 Disable-ADUser -Identity user1 -DisabledOU 'OU=Users,OU=Disabled Accounts,DC=domain,DC=com' -Description "CR00001' -Domain domain.forest.com -Verbose -whatif
 .EXAMPLE
-Disable-ADUser -Identity user1 -PSCredential domain\user -Description "CR00002" -verbose
+Disable-ADUser -Identity user1 -PSCredential domain\user -Description "CR00001" -verbose
 #>
     [CmdletBinding(SupportsShouldProcess=$True,ConfirmImpact='Medium')]
     param(
