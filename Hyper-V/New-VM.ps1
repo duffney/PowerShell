@@ -1,9 +1,9 @@
 $Name = Read-Host
 $SwitchName = 'Internal'
 $HardDiskSize = 32GB
-$HDPath = 'C:\Hyper-V\Virtual Hard Disks'+'\'+$Name+'.vhdx'
+$HDPath = 'E:\Hyper-V\Virtual Hard Disks'+'\'+$Name+'.vhdx'
 $Generation = '2'
-$ISO_Path = 'C:\Hyper-V\ISO\WindowsServer2016TechnicalPreview4.ISO'
+$ISO_Path = 'D:\ISOs\Windows Server 2016\WindowsServer2016TechnicalPreview4.ISO'
 
 New-VM -Name $Name -SwitchName $SwitchName `
 -NewVHDSizeBytes $HardDiskSize `

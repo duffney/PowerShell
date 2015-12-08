@@ -1,5 +1,8 @@
 Get-NetAdapter | Select Name,MacAddress #Select NetAdpter with internet access
-New-VMSwitch -NetAdapterName 'Wi-Fi' -Name 'External' #Create External internet providing Hyper-v adapter
+Get-NetAdapter | Select Name,InterfaceDescription
+
+$NetAdapterName = (Get-NetAdapter).Name
+New-VMSwitch -NetAdapterName $NetAdapterName[0] -Name 'External' #Create External internet providing Hyper-v adapter
 New-VMSwitch -SwitchType Internal -Name 'Internal'
 
 $Servers = 'ZDC01','HDC01'
