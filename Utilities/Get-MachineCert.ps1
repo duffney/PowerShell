@@ -1,6 +1,6 @@
 ﻿#requires -version 4.0
 #requires -module PKI
-
+#Author Jeff Hicks
 #get machine cert thumbprint and export cert
 Function Export-MachineCert {
 
