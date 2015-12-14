@@ -6,20 +6,14 @@
         [pscredential]$safemodeAdministratorCred,             
         [Parameter(Mandatory)]            
         [pscredential]$domainCred,
-        [Parameter(Mandatory)]        
         [string]$IPAddress,
-        [Parameter(Mandatory)]
         [string]$DefaultGateway,
         [string]$TimeZone = 'Central Standard Time'
 
 
     )             
             
-    Import-DscResource -ModuleName xActiveDirectory
-    Import-DscResource –ModuleName xPSDesiredStateConfiguration
-    Import-DscResource -Module xNetworking
-    Import-DscResource -Module xComputerManagement
-    Import-DscResource -Module xTimeZone
+    Import-DscResource -ModuleName xActiveDirectory,xPSDesiredStateConfiguration,xNetworking,xComputerManagement,xTimeZone
     
             
     Node $AllNodes.Where{$_.Role -eq "Primary DC"}.Nodename             
@@ -72,11 +66,11 @@
         }            
             
         # Optional GUI tools            
-        WindowsFeature ADDSTools            
-        {             
-            Ensure = "Present"             
-            Name = "RSAT-ADDS"             
-        }            
+        #WindowsFeature ADDSTools            
+        #{             
+        #    Ensure = "Present"             
+        #   Name = "RSAT-ADDS"             
+        #}            
             
         # No slash at end of folder paths            
         xADDomain FirstDS             
@@ -95,14 +89,14 @@
 $ConfigData = @{             
     AllNodes = @(             
         @{             
-            Nodename = 'W2012R2DC'          
+            Nodename = 'S1'          
             Role = "Primary DC"             
-            DomainName = "Manticore.org"             
+            DomainName = "Source.org"             
             RetryCount = 20              
             RetryIntervalSec = 30            
             PsDscAllowPlainTextPassword = $true
             PSDscAllowDomainUser = $true
-            IPAddress = '192.168.2.10'
+            IPAddress = '192.168.2.2'
             DefaultGateway = '192.168.2.1'            
         }                      
     )             
