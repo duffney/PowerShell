@@ -24,7 +24,7 @@
         LocalConfigurationManager            
         {            
             ActionAfterReboot = 'ContinueConfiguration'            
-            ConfigurationMode = 'ApplyOnly'            
+            ConfigurationMode = 'ApplyAndAutoCorrect'            
             RebootNodeIfNeeded = $true            
         }
         

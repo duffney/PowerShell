@@ -1,26 +1,38 @@
-﻿#requires -version 4.0
-#requires -module PKI
-#Author Jeff Hicks
-#get machine cert thumbprint and export cert
-Function Export-MachineCert {
+﻿Function Export-MachineCert {
+<#
+.SYNOPSIS
+Harvests a certificate from a remote system.
+.DESCRIPTION
+Invokes a command on a remote system to copy the certificate to the machine running the command.
+.PARAMETER Computername
+Specifies the name of the remote system to harvest the certificate.
+.PARAMETER Path
+Provides the path where the certificate is copied to on the host system.
+.PARAMETER Template
+Specifies the template used when generating the certificate on the remote system.
+.EXAMPLE
 
+Requires PowerShell version 4
+#>
 [cmdletbinding()]
 Param(
 [ValidateNotNullorEmpty()]
 [string]$computername = $env:COMPUTERNAME,
 [ValidateScript({Test-Path $_})]
-[string]$Path="C:\Certs"
+[string]$Path="$env:SystemDrive\Certs",
+[ValidateSet("Client Authentication","Server Authentication")] 
+[string]$Template
+
 
 )
 
 Try {
     #assumes a single certificate so sort on NotAfter
     Write-Verbose "Querying $computername for Machine certificates"
-    $cert = invoke-command { 
-     #get server authentication certs that have not expired
-     dir Cert:\LocalMachine\my | 
-     where {$_.EnhancedKeyUsageList.FriendlyName -contains "Server Authentication" -AND $_.notAfter -gt (Get-Date) } |
-     Sort NotAfter -Descending | Select -first 1
+    $cert = invoke-command -scriptblock { 
+     Get-ChildItem Cert:\LocalMachine\my | 
+     Where-Object {$_.EnhancedKeyUsageList.FriendlyName -contains $Template -AND $_.notAfter -gt (Get-Date) } |
+     Sort-Object NotAfter -Descending | Select -first 1
      } -computername $computername -ErrorAction Stop
      write-verbose ($cert | out-string)
 }
@@ -47,37 +59,3 @@ else {
  }
 } #if $cert
 } #Export-MachineCert
-
-Function Get-MachineCertThumbnail {
-
-[cmdletbinding()]
-Param(
-[ValidateNotNullorEmpty()]
-[string]$computername = $env:COMPUTERNAME
-)
-
-Try {
-    #assumes a single certificate so sort on NotAfter
-    Write-Verbose "Querying $computername for Machine certificates"
-    $cert = invoke-command { 
-     #get server authentication certs that have not expired
-     dir Cert:\LocalMachine\my | 
-     where {$_.EnhancedKeyUsageList.FriendlyName -contains "Server Authentication" -AND $_.notAfter -gt (Get-Date) } |
-     Sort NotAfter -Descending | Select -first 1
-     } -computername $computername -ErrorAction Stop
-
-}
-Catch {
-    Throw $_
-}
-
-If ($cert) {
-  write-verbose ($cert | out-string)
-  [pscustomobject]@{
-     Computername = $cert.Subject.Substring(3)
-     Thumbprint = $cert.Thumbprint
-     Verified = Test-Certificate $cert 
-    }
-}
-
-} #Get-MachineCertThumbnail

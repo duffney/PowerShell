@@ -1,4 +1,9 @@
-$Name = Read-Host
+﻿$VMS = 'ZDC01','ZPull01','ZCert01','ZSQL01'
+
+
+foreach ($VM in $VMs){
+
+$Name = $VM
 $SwitchName = 'Internal'
 $HardDiskSize = 32GB
 $HDPath = 'E:\Hyper-V\Virtual Hard Disks'+'\'+$Name+'.vhdx'
@@ -18,8 +23,4 @@ $MyNIC = Get-VMNetworkAdapter $Name
 
 Set-VMFirmware $Name -BootOrder $MyDVD,$MyHD,$MyNIC
 Set-VMMemory $Name -DynamicMemoryEnabled $false
-
-break
-
-#New-NetIPAddress �InterfaceIndex 12 �IPAddress -192.0.2.2 �PrefixLength 24 �DefaultGateway -192.0.2.1
-#Get-NetFirewallProfile | Set-NetFirewallProfile -Enabled false #disable firewall
+}
