@@ -24,3 +24,4 @@ $MyNIC = Get-VMNetworkAdapter $Name
 Set-VMFirmware $Name -BootOrder $MyDVD,$MyHD,$MyNIC
 Set-VMMemory $Name -DynamicMemoryEnabled $false
 }
+

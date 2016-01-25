@@ -2,10 +2,15 @@ Configuration DSCLabUp {
     
     param (
         [string[]]$NodeName,        
-        [string]$MachineName
+        [string]$MachineName,
+        [Parameter(Mandatory)]             
+        [pscredential]$safemodeAdministratorCred,             
+        [Parameter(Mandatory)]            
+        [pscredential]$domainCred        
         )
     
     Import-DscResource -ModuleName xActiveDirectory
+    Import-DscResource –ModuleName PSDesiredStateConfiguration
     Import-DscResource –ModuleName xPSDesiredStateConfiguration
     Import-DscResource -Module cNetworking
     Import-DscResource -Module xNetworking
@@ -60,7 +65,72 @@ Configuration DSCLabUp {
         {             
             Ensure = "Present"             
             Name = "RSAT-ADDS"             
-        }   
+        }
+
+        File ADFiles            
+        {            
+            DestinationPath = 'C:\NTDS'            
+            Type = 'Directory'            
+            Ensure = 'Present'            
+        }            
+                    
+        WindowsFeature ADDSInstall             
+        {             
+            Ensure = "Present"             
+            Name = "AD-Domain-Services"
+            IncludeAllSubFeature = $true
+             
+        }
+        
+        xADDomain FirstDS             
+        {             
+            DomainName = $Node.DomainName             
+            DomainAdministratorCredential = $domainCred             
+            SafemodeAdministratorPassword = $safemodeAdministratorCred            
+            DatabasePath = 'C:\NTDS'            
+            LogPath = 'C:\NTDS'            
+            DependsOn = "[WindowsFeature]ADDSInstall","[File]ADFiles"            
+        }
+
+        WindowsFeature DHCP {
+            DependsOn = '[xIPAddress]NewIpAddress'
+            Name = 'DHCP'
+            Ensure = 'PRESENT'
+            IncludeAllSubFeature = $true                                                                                                                              
+ 
+        }  
+ 
+        WindowsFeature DHCPTools
+        {
+            DependsOn= '[WindowsFeature]DHCP'
+            Ensure = 'Present'
+            Name = 'RSAT-DHCP'
+            IncludeAllSubFeature = $true
+        }
+        
+        xDhcpServerScope Scope
+        {
+         DependsOn = '[WindowsFeature]DHCP'
+         Ensure = 'Present'
+         IPEndRange = '192.168.2.200'
+         IPStartRange = '192.168.2.100'
+         Name = 'PowerShellScope'
+         SubnetMask = '255.255.255.0'
+         LeaseDuration = '00:08:00'
+         State = 'Active'
+         AddressFamily = 'IPv4'
+        } 
+ 
+        xDhcpServerOption Option
+     {
+         Ensure = 'Present'
+         ScopeID = '192.168.2.0'
+         DnsDomain = 'zephyr.org'
+         DnsServerIPAddress = '192.168.2.2'
+         AddressFamily = 'IPv4'
+         Router = '192.168.2.1'
+     } 
+                                                  
     }
 }
 
@@ -70,9 +140,12 @@ $ConfigData = @{
             Nodename = 'Localhost'          
             Role = "DomainController"
             MachineName = 'ZDC01'
+            DomainName = "Zephyr.org"                         
             IPAddress = '192.168.2.2'
             DefaultGateway = '192.168.2.1'
             DNSIPAddress = '127.0.0.1'
+            PsDscAllowPlainTextPassword = $true
+            PSDscAllowDomainUser = $true     
         }
                       
     )             
@@ -80,7 +153,11 @@ $ConfigData = @{
 
 # Save ConfigurationData in a file with .psd1 file extension
 
-DSCLabUp -ConfigurationData $ConfigData -verbose
+DSCLabUp -ConfigurationData $ConfigData `
+    -safemodeAdministratorCred (Get-Credential -UserName '(Password Only)' `
+     -Message "New Domain Safe Mode Administrator Password") `
+     -domainCred (Get-Credential -UserName Zephyr\administrator `
+      -Message "New Domain Admin Credential")
 
 Set-DscLocalConfigurationManager -Path .\DSCLabUp -Verbose -Force
 Start-DscConfiguration -ComputerName localhost -wait -force -Verbose -Path .\DSCLabUp
