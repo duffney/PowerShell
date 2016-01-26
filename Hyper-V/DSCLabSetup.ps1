@@ -28,7 +28,7 @@ Save-Module -Name 'xNetworking','xDHCPServer','xComputerManagement','xActiveDire
 #Create .iso with imgburn
 
 #mount .iso with dsc resources
-$LabResourcePath = 'C:\Hyper-V\ISO\LabResources(1).iso'
+$LabResourcePath = 'C:\Hyper-V\ISO\DSCResources.iso'
 Set-VMDvdDrive -VMName $Name -Path $LabResourcePath
 
 Invoke-Command -VMName $Name -ScriptBlock {Rename-Computer -NewName 'ZDC01';Restart-Computer -Force}
