@@ -134,6 +134,9 @@ Configuration DSCLabUp {
     }
 }
 
+$DNSArray = @('127.0.0.1')
+
+
 $ConfigData = @{             
     AllNodes = @(             
         @{             
@@ -143,7 +146,7 @@ $ConfigData = @{
             DomainName = "Zephyr.org"                         
             IPAddress = '192.168.2.2'
             DefaultGateway = '192.168.2.1'
-            DNSIPAddress = '127.0.0.1'
+            DNSIPAddress = $DNSArray
             PsDscAllowPlainTextPassword = $true
             PSDscAllowDomainUser = $true     
         }

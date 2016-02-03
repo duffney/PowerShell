@@ -1,4 +1,4 @@
-$Name = Read-Host
+$Name = 'ZCer01'
 $SwitchName = 'Internal'
 $HardDiskSize = 32GB
 $HDPath = 'E:\Hyper-V\Virtual Hard Disks'+'\'+$Name+'.vhdx'
