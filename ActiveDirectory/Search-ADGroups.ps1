@@ -2,6 +2,8 @@
 $DC = 'domain.forest.com'
 $Groups = (Get-ADGroup -Filter * -Server $DC).name
 
+
+
 Foreach ($Group in $Groups){
     $Group = Get-ADGroup -Filter {Name -eq $Group} -Properties Name, DistinguishedName, `
         GroupCategory, GroupScope, whenCreated, whenChanged, member, `
