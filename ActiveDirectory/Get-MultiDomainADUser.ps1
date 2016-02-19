@@ -38,9 +38,9 @@ Get-MDADUser -Identity duffney -Properties *
         foreach ($Domain in $Domains){
             Try {
                 if ($Properties -ne ""){
-                    Get-ADUser -Identity $User -Server $Domain -Properties $Properties
+                    Get-ADUser -Identity $Identity -Server $Domain -Properties $Properties
                 } else {
-                    Get-ADUser -Identity $User -Server $Domain
+                    Get-ADUser -Identity $Identity -Server $Domain
                 }
                 break
             }
