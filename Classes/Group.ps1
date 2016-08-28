@@ -24,6 +24,13 @@ class Group {
         $this.Domain = ($this.Domain -split "/")[0]
     }
 
+    [void]GetGroup(){
+         $this.Manager = (Get-ADGroup -Identity $this.Name -Properties Managedby).Managedby
+         $this.Manager = $this.Manager -replace "(CN=)(.*?),.*",'$2'
+         $this.Members = (Get-NestedGroupMember -Group $this.Name).samaccountname
+         $this.Domain = (Get-ADGroup -Identity $this.Name -Properties CanonicalName).CanonicalName
+         $this.Domain = ($this.Domain -split "/")[0]             
+    }
 
 }
 
