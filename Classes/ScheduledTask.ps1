@@ -33,5 +33,3 @@ class ScheduledTask {
 
 $NewTask = [ScheduledTask]::New('T6','Taskmgr.exe','-NonInteractive -NoLogo')
 $NewTask.SetTask()
-
-$NewTask
