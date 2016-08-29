@@ -4,17 +4,23 @@ class ScheduledTask {
     [CimInstance]$Settings
     [CimInstance]$Task
 
-    ScheduledTask([string]$TaskName) {
+    ScheduledTask([string]$TaskName,[string]$Execute) {
         $this.TaskName = $TaskName
-    }
-
-    [void]SetAction([string]$Execute){
         $this.Action = New-ScheduledTaskAction -Execute $Execute
-    }
-
-    [void]SetSettings(){
         $this.Settings = New-ScheduledTaskSettingsSet
     }
+
+    ScheduledTask([string]$TaskName,[string]$Execute) {
+        $this.TaskName = $TaskName
+        $this.Action = New-ScheduledTaskAction -Execute $Execute
+        $this.Settings = New-ScheduledTaskSettingsSet
+    }      
+
+    ScheduledTask([string]$TaskName,[string]$Execute,[string]$Arguement) {
+        $this.TaskName = $TaskName
+        $this.Action = New-ScheduledTaskAction -Execute $Execute -Argument $Arguement
+        $this.Settings = New-ScheduledTaskSettingsSet
+    }    
 
     [void]SetTask(){
         $this.Task = New-ScheduledTask -Settings $this.Settings -Action $this.Action
@@ -25,9 +31,7 @@ class ScheduledTask {
     }
 }
 
-$NewTask = [ScheduledTask]::New('T6')
-$NewTask.SetAction('Taskmgr.exe')
-$NewTask.SetSettings()
+$NewTask = [ScheduledTask]::New('T6','Taskmgr.exe','-NonInteractive -NoLogo')
 $NewTask.SetTask()
 
 $NewTask
