@@ -19,19 +19,10 @@ class ScheduledTask {
 }
 
 Class Action : ScheduledTask {
-    [CimInstance]$ActionInstance
+    [string]$Execute
+    [string]$Arguement
+    [string]$WorkingDirectory
 
-    Action([string]$Execute) {
-        $this.ActionInstance = New-ScheduledTaskAction -Execute $Execute
-    }
-
-    Action([string]$Execute,[string]$Arguement) {
-        $this.ActionInstance = New-ScheduledTaskAction -Execute $Execute -Argument $Arguement
-    }
-
-    Action([string]$Execute,[string]$Arguement,[string]$WorkingDirectory) {
-        $this.ActionInstance = New-ScheduledTaskAction -Execute $Execute -Argument $Arguement -WorkingDirectory $WorkingDirectory
-    }      
 }
 
 Class Settings : ScheduledTask {
@@ -54,8 +45,11 @@ Class Task : ScheduledTask {
     }  
 }
 
-$Action = [Action]::new('powershell.exe','-nologon','C:\scripts')
-$Settings = [Settings]::new($true)
-$Task = [Task]::New($Action.ActionInstance,$Settings.SettingsInstance)
-$ScheduledTask = [ScheduledTask]::new('T1',$Task.TaskInstance)
-$ScheduledTask.Register()
+# $Action = [Action]::new('powershell.exe','-nologon','C:\scripts')
+# $Settings = [Settings]::new($true)
+# $Task = [Task]::New($Action.ActionInstance,$Settings.SettingsInstance)
+# $ScheduledTask = [ScheduledTask]::new('T1',$Task.TaskInstance)
+# $ScheduledTask.Register()
+
+$Action = [Action]::new()
+$Action.Execute = 'powershell.exe';$Action.Arguement = '-nologon';$Action.WorkingDirectory = 'c:\scripts'

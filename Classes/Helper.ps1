@@ -8,7 +8,9 @@ class Helper
         {
             if($this.GetType().GetProperty($prop))
             {
-                $splat.Add($prop, $this.$prop)
+                if ($this.$prop){
+                    $splat.Add($prop, $this.$prop)
+                }
             }
         }
 
@@ -16,16 +18,15 @@ class Helper
     }
 }
 
-class Concept : Helper
+class Action : Helper
 {
-    [String] $Name
-    [Int32] $Answer
-    [Boolean] $HasTowel
+    [string]$Execute
+    [string]$Argument
+    [string]$WorkingDirectory
 
-    Concept ([String] $Name, [Int32] $Answer)
+    Action ()
     {
-        $this.Name = $Name
-        $this.Answer = $Answer
+
     }
 }
 
