@@ -3,11 +3,11 @@ $inf = @"
 Signature="`$Windows NT`$"
 
 [NewRequest]
-Subject = "CN=Pullv2, OU='IT, O=Globomantics, L=Omaha, S=NE, C=US"
+Subject = "CN=Pull, OU='IT, O=Globomantics, L=Omaha, S=NE, C=US"
 KeySpec = 1
 KeyLength = 2048
 Exportable = TRUE
-FriendlyName = PSDSCPullServerCert2
+FriendlyName = PSDSCPullServerCert
 MachineKeySet = TRUE
 SMIME = False
 PrivateKeyArchive = FALSE
@@ -23,10 +23,11 @@ $infFile = 'C:\temp\certrq.inf'
 $requestFile = 'C:\temp\request.req'
 $CertFileOut = 'c:\temp\certfile.cer'
 
-$inf | Set-Content -Path "C:\temp\certrq.inf"
+mkdir c:\temp
+$inf | Set-Content -Path $infFile
 
 & certreq.exe -new "$infFile" "$requestFile"
 
-& certreq.exe -submit -config Pullv2.globomantics.com\globomantics-PULLV2-CA -attrib "CertificateTemplate:WebServer" "$requestFile" "$CertFileOut"
+& certreq.exe -submit -config Pull.globomantics.com\globomantics-PULL-CA -attrib "CertificateTemplate:WebServer" "$requestFile" "$CertFileOut"
 
 & certreq.exe -accept "$CertFileOut"

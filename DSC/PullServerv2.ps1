@@ -12,7 +12,7 @@ param
 [string] $RegistrationKey
 )
 
-
+Import-DSCResource -ModuleName PSDesiredStateConfiguration
 Import-DSCResource -ModuleName xPSDesiredStateConfiguration
 
     Node $NodeName
@@ -36,7 +36,6 @@ Import-DSCResource -ModuleName xPSDesiredStateConfiguration
         DependsOn = '[WindowsFeature]DSCServiceFeature'
         UseSecurityBestPractices = $true
         }
-
         
         File RegistrationKeyFile
         {

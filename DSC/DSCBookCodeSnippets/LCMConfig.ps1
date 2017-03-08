@@ -1,8 +1,8 @@
- [DSCLocalConfigurationManager()]
+[DSCLocalConfigurationManager()]
 
 Configuration LCM_Pull {
 
-    Node Pullv2 {
+    Node Pull {
 
         Settings {
             ConfigurationMode = 'ApplyAndAutoCorrect'
@@ -10,22 +10,23 @@ Configuration LCM_Pull {
         }
 
         ConfigurationRepositoryWeb PullServer {
-            ServerURL = 'https://pullv2:8080/PsDscPullserver.svc'
+            ServerURL = 'https://pull:8080/PsDscPullserver.svc'
             AllowUnsecureConnection = $false
-            RegistrationKey = 'd50ea3d6-8a5d-4066-8876-84c7f939ffb7'
-            ConfigurationNames = @('TimeZoneConfig')
+            RegistrationKey = 'ff7e4129-5c8a-4f23-bbeb-30a85aafb708'
+            ConfigurationNames = @('WebServerConfig')
         }
 
         ResourceRepositoryWeb PullServerModules {
-            ServerURL = 'https://pullv2:8080/PsDscPullserver.svc'
+            ServerURL = 'https://pull:8080/PsDscPullserver.svc'
             AllowUnsecureConnection = $false
-            RegistrationKey = 'd50ea3d6-8a5d-4066-8876-84c7f939ffb7'
+            RegistrationKey = 'ff7e4129-5c8a-4f23-bbeb-30a85aafb708'
         }
     }
 }
 
 LCM_Pull
 
-Set-DscLocalConfigurationManager -ComputerName pullv2 -Path .\LCM_Pull -Verbose -Force
+Set-DscLocalConfigurationManager -ComputerName pull -Path .\LCM_Pull -Verbose -Force
 
-Update-DscConfiguration -ComputerName pullv2 -Verbose -Wait
+Update-DscConfiguration -ComputerName pull -Verbose -Wait
+
