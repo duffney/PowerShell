@@ -77,8 +77,25 @@ foreach ($item in $collection)
 #endregion
 
 #region Simple Scripts and Functions
-$Password = Read-Host -AsSecureString
-New-LocalUser -Name localadmin -Description 'New Local Admin' -AccountNeverExpires -Password $Password
 
-### new local user psv5.1 script
-### convert to function
+### Scripting
+
+$Password = Read-Host -AsSecureString
+New-LocalUser -Name localadmin -Description 'New Local Admin' -AccountNeverExpires -Password $Password -PasswordNeverExpires
+Add-LocalGroupMember -Group Administrators -Member localadmin
+Get-LocalGroupMember -Group administrators
+
+### Functions
+
+function New-LocalAdmin ($Name) {
+    Write-Output "Please Enter Password"
+    $Password = Read-Host -AsSecureString
+    
+    Write-Output "Creating new user [$Name]"
+    New-LocalUser -Name $Name -Description 'New Local Admin' -AccountNeverExpires -Password $Password -PasswordNeverExpires
+    
+    Write-Output "Adding [$Name] to [Administrators] group"
+    Add-LocalGroupMember -Group Administrators -Member $Name
+}
+
+#endregion
