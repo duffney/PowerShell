@@ -10,22 +10,11 @@ Get-Help Get-Process -Examples
 
 Get-Process -Name PowerShell
 
-Help Update-Help
-
 Update-Help
 
 #endregion
 
 #region Getting Information
-
-Get-CimInstance Win32_OperatingSystem
-
-Get-CimInstance Win32_OperatingSystem | Get-Member
-
-Get-CimInstance Win32_OperatingSystem | Select-Object *
-
-Get-CimInstance Win32_OperatingSystem | Select-Object Caption,InstallDate,ServicePackMajorVersion
-
 Get-WmiObject -class Win32_LogicalDisk
 
 Get-WmiObject -class Win32_LogicalDisk | Where-Object DriveType -eq 3
@@ -37,33 +26,15 @@ Get-WmiObject -class Win32_LogicalDisk -Filter "DriveType=3"
 #endregion
 
 #region Making Changes
-
-### Processes
-Start-Process NotePad
-
-Get-Process Notepad | Stop-Process
-
-### File System
 New-Item -Path $env:SystemDrive\NPS -Name NPS -ItemType Directory
 
 New-Item -Path $env:SystemDrive\NPS -Name NPSfile.txt -ItemType File -Value 'Test File'
 
 Get-Content -Path $env:SystemDrive\NPS\NPSfile.txt
 
-Set-Content -Path $env:SystemDrive\NPS\NPSfile.txt -Value 'New Content'
+Set-Content -Path $env:SystemDrive\NPS\NPSfile.txt -Value 'PowerShell'
 
 Get-Content -Path $env:SystemDrive\NPS\NPSfile.txt
-
-### Registry
-New-Item -Path HKLM:\Software -Name NPS
-
-Test-Path -Path HKLM:\SOFTWARE\NPS
-
-Get-ItemProperty -Path HKLM:\SOFTWARE\NPS
-
-Set-Item -Path HKLM:\SOFTWARE\NPS -Value 'New Value'
-
-Get-ItemProperty -Path HKLM:\SOFTWARE\NPS
 
 #endregion
 
@@ -86,11 +57,28 @@ $name = $proc[0].ProcessName
 $name.ToUpper()
 
 ### Parentheses
+Get-Process (Get-Content -Path C:\NPS\NPSfile.txt)
 
 ### Operators
+'PowerShell' -eq 'PowerShell'
+'NPS' -ne 'PowerShell'
+
+help *operators*
 
 ### If construct
 
 ### Foreach loop
+$collection = 'PowerShell','Is','Awesome'
 
+foreach ($item in $collection)
+{
+    Write-Host $item -ForegroundColor Green
+}
 #endregion
+
+#region Simple Scripts and Functions
+$Password = Read-Host -AsSecureString
+New-LocalUser -Name localadmin -Description 'New Local Admin' -AccountNeverExpires -Password $Password
+
+### new local user psv5.1 script
+### convert to function
